@@ -1,10 +1,18 @@
 #Copyright Bail&Will&loaf0808 2025
 #SkyNet:libgui 图形界面模块
 
+#定义一个函数，用于在root窗口中显示课程列表
+def inroot(root:Tk,lessonlst:list):
+    frame = root.lessons_frame
+    for i,lesson in enumerate(lessonlst):
+        Label(frame,text=lesson.name).grid(row=i,column=0)
+        Button(frame,text=f'记忆 {lesson.progress[0]}/{len(lesson.words)}',command=lambda arg=lesson:libstudy.remember(root,arg)).grid(row=i,column=1)
+        Button(frame,text=f'默写 {lesson.progress[2]}/{len(lesson.words)}',command=lambda arg=lesson:libstudy.write(root,arg)).grid(row=i,column=3)
+
 from tkinter import *
 from tkinter import messagebox as msgbox,ttk
 from _tkinter import TclError
-import libsc as sc,libfile,bss,,libnetwork,libclass,libstudy
+import libsc as sc,libfile,SkyNet,libclass,libstudy
 
 def root():
     root = Tk()
@@ -19,7 +27,6 @@ def root():
     lesson_choose_frame.pack(anchor=NW)
     Label(lesson_choose_frame,text='请选择课程').grid()
     Button(lesson_choose_frame,text='添加课程',command=libfile.add_lesson).grid(row=0,column=1)
-    Button(lesson_choose_frame,text='获取课程',command=libnetwork.open_browser_to_fetch_lessons).grid(row=0,column=2)
     root.lesson_choose_frame = lesson_choose_frame
 
     sccontrol_frame = Frame(root)
@@ -40,7 +47,7 @@ def root():
     lessons_frame.pack(anchor=NW)
     root.lessons_frame = lessons_frame  #把这个frame夹带出去，方便其他函数使用。后期将会把libgui用class重写，届时将不需要这样操作
 
-    Label(root,text='特别鸣谢：红杉树智能英语(http://www.hssenglish.com)提供运行逻辑',fg='#7f7f7f').pack(side=BOTTOM,fill=X)
+    Label(root,text='特别鸣谢：红杉树智能英语(http://www.hssenglish.com)提供运行逻辑 Bail 对此项目的支持与帮助！,fg='#7f7f7f').pack(side=BOTTOM,fill=X)
     return root
 def inroot(root:Tk,lessonlst:list):
     root = root.lessons_frame
